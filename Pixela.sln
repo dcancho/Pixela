@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pixela.Core", "Pixela.Core\Pixela.Core.csproj", "{85EFC85A-7393-4CD7-B52C-6070B5938162}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pixela", "Pixela\Pixela.csproj", "{2C20DAB2-F39E-4AD9-9A7C-8988BBF26D8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixela.Test", "Pixela.Test\Pixela.Test.csproj", "{90C7DAFB-89F8-4EAE-9F5E-8F006C701A5E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{85EFC85A-7393-4CD7-B52C-6070B5938162}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85EFC85A-7393-4CD7-B52C-6070B5938162}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85EFC85A-7393-4CD7-B52C-6070B5938162}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85EFC85A-7393-4CD7-B52C-6070B5938162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C20DAB2-F39E-4AD9-9A7C-8988BBF26D8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C20DAB2-F39E-4AD9-9A7C-8988BBF26D8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C20DAB2-F39E-4AD9-9A7C-8988BBF26D8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C20DAB2-F39E-4AD9-9A7C-8988BBF26D8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C7DAFB-89F8-4EAE-9F5E-8F006C701A5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C7DAFB-89F8-4EAE-9F5E-8F006C701A5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C7DAFB-89F8-4EAE-9F5E-8F006C701A5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C7DAFB-89F8-4EAE-9F5E-8F006C701A5E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27B2319C-F997-4A1A-9DAD-274B4F79A0E1}
+	EndGlobalSection
+EndGlobal
