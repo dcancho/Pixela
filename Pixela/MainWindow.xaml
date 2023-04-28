@@ -29,12 +29,12 @@
                                 <Button Content="Media" Background="#FF181B20" Foreground="White" BorderBrush="{x:Null}" Height="23" Width="240" Margin="10,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                                 <Button Content="Mediana" Background="#FF181B20" Foreground="White" BorderBrush="{x:Null}" Height="23" Width="240" Margin="264,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                                 <Label Content="Tamaño de máscara:" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Foreground="White"/>
-                                <TextBox VerticalContentAlignment="Center" Text="Example" Height="16" Canvas.Left="130" Canvas.Top="15" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                                <CheckBox Content="Aplicar factor" HorizontalAlignment="Left" Margin="414,17,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <TextBox VerticalContentAlignment="Center" Text="Example" Height="22" Canvas.Left="130" Canvas.Top="15" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <CheckBox Content="Aplicar factor" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Canvas.Left="414" Canvas.Top="17"/>
                                 <Label Content="Factor:" HorizontalAlignment="Left" Margin="264,11,0,0" VerticalAlignment="Top" Foreground="White"/>
-                                <TextBox VerticalContentAlignment="Center" Text="Example" Canvas.Left="314" Canvas.Top="15" HorizontalAlignment="Left" Height="16" VerticalAlignment="Center" Width="95"/>
+                                <TextBox VerticalContentAlignment="Center" Text="Example" Canvas.Left="314" Canvas.Top="15" HorizontalAlignment="Center" Height="22" VerticalAlignment="Top" Width="95"/>
                                 <Label Content="Valores de máscara:" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Foreground="White"/>
-                                <TextBox VerticalContentAlignment="Center" Text="5,8,5,6,4,8,5,9" Canvas.Left="130" Canvas.Top="42" Width="374"/>
+                                <TextBox VerticalContentAlignment="Center" Text="5,8,5,6,4,8,5,9" Canvas.Left="130" Canvas.Top="42" Width="374" Height="22"/>
                             </Canvas>
                         </Grid>
                     </GroupBox>
