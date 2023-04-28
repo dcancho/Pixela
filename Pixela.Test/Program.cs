@@ -7,22 +7,26 @@ namespace Pixela.Test
     {
         static void Main()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            //Inicializar imagen
-            Image image = new(@"C:\Users\Diego\Pictures\test.png");
-            //Inicializar filtro
-            Filter filter = new(new float[] 
+            Filter filter = new(new float[]
                 {4,4,4,
                 0,-24,0,
                 4,4,4 }
-                ,false);
-            //Aplicar filtro
-            image.ApplyFilter(filter,true);
-            //Guardar imagen
-            image.Save("result.png");
-            stopwatch.Stop();
-            Console.WriteLine($"Time elapsed: {stopwatch.ElapsedMilliseconds}ms");
+                , false);
+            string inputDirectory = @"C:\Users\Diego\Pictures\Testing";
+            string outputDirectory = @"C:\Users\Diego\Pictures\Filtered";
+            Directory.CreateDirectory(outputDirectory);
+            string[] allowedExtensions = new[] { ".png", ".jpg", ".jpeg" };
+            string[] imageFiles = Directory.GetFiles(inputDirectory)
+                .Where(file => allowedExtensions.Any(file.ToLower().EndsWith))
+                .ToArray();
+            foreach (string imageFile in imageFiles)
+            {
+                Image image = new(imageFile);
+                image.ApplyFilter(filter, true);
+                string outputFilename = Path.GetFileNameWithoutExtension(imageFile) + "_filtered.png";
+                string outputPath = Path.Combine(outputDirectory, outputFilename);
+                image.Save(outputPath);
+            }
         }
     }
 }
