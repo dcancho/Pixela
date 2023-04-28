@@ -11,7 +11,7 @@ namespace Pixela.Core
 		Grayscale
 	}
 
-	public struct Layer : IDisposable
+	public struct Layer
 	{
 		public ValueType Type { get; set; }
 		public int Height { get; set; }
@@ -85,32 +85,36 @@ namespace Pixela.Core
 			}
 			Layers = newLayers;
 		}
-		private Layer ApplyFilterToLayer(int layerIndex, Filter filter, bool applyTransform)
-		{
-			float[,] output = new float[Width, Height];
-			float maxValueFound = float.MinValue;
-			float minValueFound = float.MaxValue;
-			for (int i = 0; i < Width; i++)
-			{
-				for (int j = 0; j < Height; j++)
-				{
-					float result = ApplyFilterToPixel(i, j, layerIndex, filter);
-					maxValueFound = result > maxValueFound ? result : maxValueFound;
-					minValueFound = result < minValueFound ? result : minValueFound;
-					output[i, j] = result;
-				}
-			}
+        private Layer ApplyFilterToLayer(int layerIndex, Filter filter, bool applyTransform)
+        {
+            float[,] output = new float[Width, Height];
+            float maxValueFound = float.MinValue;
+            float minValueFound = float.MaxValue;
+            object syncLock = new object();
+            Parallel.For(0, Width, i =>
+            {
+                for (int j = 0; j < Height; j++)
+                {
+                    float result = ApplyFilterToPixel(i, j, layerIndex, filter);
+                    lock (syncLock)
+                    {
+                        maxValueFound = result > maxValueFound ? result : maxValueFound;
+                        minValueFound = result < minValueFound ? result : minValueFound;
+                    }
+                    output[i, j] = result;
+                }
+            });
 
-			if (applyTransform)
-			{
-				return new Layer(Layers[layerIndex].Type, ApplyLinearTransform(output, maxValueFound, minValueFound));
-			}
-			else
-			{
-				return new Layer(Layers[layerIndex].Type, TrunkValues(output));
-			}
-		}
-		private float ApplyFilterToPixel(int pixelXPos, int pixelYPos, int layerIndex, Filter filter)
+            if (applyTransform)
+            {
+                return new Layer(Layers[layerIndex].Type, ApplyLinearTransform(output, maxValueFound, minValueFound));
+            }
+            else
+            {
+                return new Layer(Layers[layerIndex].Type, TrunkValues(output));
+            }
+        }
+        private float ApplyFilterToPixel(int pixelXPos, int pixelYPos, int layerIndex, Filter filter)
 		{
 			int displacement = (filter.MaskSize - 1) / 2;
 			float result = 0;
@@ -136,19 +140,21 @@ namespace Pixela.Core
 			}
 			return result;
 		}
-		private static byte[,] TrunkValues(float[,] rawOutput, byte maxValue = 255)
-		{
-			byte[,] normalizedOutput = new byte[rawOutput.GetLength(0), rawOutput.GetLength(1)];
-			for (int i = 0; i < rawOutput.GetLength(0); i++)
-			{
-				for (int j = 0; j < rawOutput.GetLength(1); j++)
-				{
-					normalizedOutput[i, j] = (byte)(rawOutput[i, j] % maxValue);
-				}
-			}
-			return normalizedOutput;
-		}
-		private static byte[,] ApplyLinearTransform(float[,] rawOutput, float maxValueFound, float minValueFound)
+        private static byte[,] TrunkValues(float[,] rawOutput, byte maxValue = 255)
+        {
+            int rows = rawOutput.GetLength(0);
+            int cols = rawOutput.GetLength(1);
+            byte[,] normalizedOutput = new byte[rows, cols];
+            Parallel.For(0, rows, i =>
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    normalizedOutput[i, j] = (byte)(rawOutput[i, j] % maxValue);
+                }
+            });
+            return normalizedOutput;
+        }
+        private static byte[,] ApplyLinearTransform(float[,] rawOutput, float maxValueFound, float minValueFound)
 		{
 			double scalingFactor = (255 - 0) / (double)(maxValueFound - minValueFound);
 			byte[,] normalizedOutput = new byte[rawOutput.GetLength(0), rawOutput.GetLength(1)];
@@ -184,17 +190,17 @@ namespace Pixela.Core
 			});
 			return output;
 		}
-		public void Save(string filename)
-		{
-			Image<Rgba32> output = new(Width, Height);
-			for (int i = 0; i < Width; i++)
-			{
-				for (int j = 0; j < Height; j++)
-				{
-					output[i, j] = new Rgba32(this[i, j, 0], this[i, j, 1], this[i, j, 2]);
-				}
-			}
-			output.SaveAsPng(filename);
-		}
-	}
+        public void Save(string filename)
+        {
+            Image<Rgba32> output = new(Width, Height);
+            Parallel.For(0, Width, i =>
+            {
+                for (int j = 0; j < Height; j++)
+                {
+                    output[i, j] = new Rgba32(this[i, j, 0], this[i, j, 1], this[i, j, 2]);
+                }
+            });
+            output.SaveAsPng(filename);
+        }
+    }
 }

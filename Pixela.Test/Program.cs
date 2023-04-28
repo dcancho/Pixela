@@ -8,9 +8,9 @@ namespace Pixela.Test
         static void Main()
         {
             Filter filter = new(new float[]
-                {4,4,4,
-                0,-24,0,
-                4,4,4 }
+                {0,1,0,
+                 1,-4,1,
+                 0,1,0}
                 , false);
             string inputDirectory = @"C:\Users\Diego\Pictures\Testing";
             string outputDirectory = @"C:\Users\Diego\Pictures\Filtered";
@@ -19,13 +19,17 @@ namespace Pixela.Test
             string[] imageFiles = Directory.GetFiles(inputDirectory)
                 .Where(file => allowedExtensions.Any(file.ToLower().EndsWith))
                 .ToArray();
+            Stopwatch stopwatch = new Stopwatch();
             foreach (string imageFile in imageFiles)
             {
+                stopwatch.Restart();
                 Image image = new(imageFile);
                 image.ApplyFilter(filter, true);
                 string outputFilename = Path.GetFileNameWithoutExtension(imageFile) + "_filtered.png";
                 string outputPath = Path.Combine(outputDirectory, outputFilename);
                 image.Save(outputPath);
+                stopwatch.Stop();
+                Console.WriteLine($"Filtered {image.Height * image.Width} pixels in {stopwatch.ElapsedMilliseconds}ms. {image.Height * image.Width / stopwatch.ElapsedMilliseconds} pixels per ms.");
             }
         }
     }
