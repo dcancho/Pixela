@@ -1,4 +1,5 @@
 ﻿using Pixela.Core;
+using System.Diagnostics;
 
 namespace Pixela.Test
 {
@@ -6,10 +7,22 @@ namespace Pixela.Test
     {
         static void Main()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            //Inicializar imagen
             Image image = new(@"C:\Users\Diego\Pictures\test.png");
-            Filter filter = new(new float[] {1,1,1,1,1,1,1,1,1 },true, 1f/9f);
+            //Inicializar filtro
+            Filter filter = new(new float[] 
+                {4,4,4,
+                0,-24,0,
+                4,4,4 }
+                ,false);
+            //Aplicar filtro
             image.ApplyFilter(filter,true);
+            //Guardar imagen
             image.Save("result.png");
+            stopwatch.Stop();
+            Console.WriteLine($"Time elapsed: {stopwatch.ElapsedMilliseconds}ms");
         }
     }
 }
