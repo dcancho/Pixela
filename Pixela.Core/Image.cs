@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace Pixela.Core
 {
@@ -58,12 +59,16 @@ namespace Pixela.Core
 			Width = layers[0].Width;
 			LayerDepth = (byte)layers.Length;
 		}
-		public Image(string filePath)
+		public Image(string filePath, bool convertBlackAndWhite = false)
 		{
 			Layers = ReadLayersFromFile(filePath);
 			Height = Layers[0].Height;
 			Width = Layers[0].Width;
 			LayerDepth = (byte)Layers.Length;
+			if (convertBlackAndWhite)
+			{
+                ToBlackAndWhite();
+            }
 		}
 		public byte this[int x, int y, int layer]
 		{
@@ -162,7 +167,7 @@ namespace Pixela.Core
 			{
 				for (int j = 0; j < rawOutput.GetLength(1); j++)
 				{
-					normalizedOutput[i, j] = (byte)((rawOutput[i, j] - minValueFound) * scalingFactor);
+					normalizedOutput[i, j] = (byte)(rawOutput[i, j] * scalingFactor);
 				}
 			}
 			return normalizedOutput;
@@ -197,10 +202,33 @@ namespace Pixela.Core
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    output[i, j] = new Rgba32(this[i, j, 0], this[i, j, 1], this[i, j, 2]);
+					if(LayerDepth == 1)
+					{
+						output[i, j] = new Rgba32(this[i, j, 0], this[i, j, 0], this[i, j, 0]);
+					}
+					else
+					{
+                        output[i, j] = new Rgba32(this[i, j, 0], this[i, j, 1], this[i, j, 2]);
+                    }
                 }
             });
             output.SaveAsPng(filename);
         }
+        private void ToBlackAndWhite()
+        {
+            Layer bwLayer = new Layer(ValueType.Grayscale, new byte[Width, Height]);
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+					bwLayer[j, i] = (byte)(0.333 * this[j, i, 0] + 0.333 * this[j, i, 1] + 0.334 * this[j, i, 2]);
+					//bwLayer[j, i] = this[j, i, 0];
+                }
+            }
+            this.LayerDepth = 1;
+            this.Layers = new Layer[] { bwLayer };
+        }
+
+
     }
 }
