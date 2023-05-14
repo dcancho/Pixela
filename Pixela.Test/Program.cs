@@ -8,7 +8,9 @@ namespace Pixela.Test
         static void Main()
         {
             Filter filter = new(new float[]
-                {1,0,-1,1,0,-1,1,0,-1}
+                {0,1,0,
+                1,-4,1,
+                0,1,0}
                 ,false);
             string inputDirectory = @"C:\Users\Diego\Pictures\Pixela_samples";
             string outputDirectory = @"C:\Users\Diego\Pictures\Pixela_output";
